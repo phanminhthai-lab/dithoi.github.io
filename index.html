@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chạm Vào Mây Ngàn - Hành Trình Di Linh Bảo Lộc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons cho biểu tượng -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'forest-light': '#e8f3ec',
+                        'forest': '#2d6a4f',
+                        'forest-dark': '#1b4332',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fcfcfc;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(27, 67, 50, 0.4), rgba(27, 67, 50, 0.7)), url('https://images.unsplash.com/photo-1596522354195-e84ae3c987dd?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #2d6a4f;
+            border: 3px solid #e8f3ec;
+        }
+        .timeline-line {
+            border-left: 2px dashed #95d5b2;
+            padding-left: 24px;
+            margin-left: 12px;
+        }
+        #welcome-overlay {
+            position: fixed;
+            inset: 0;
+            background: #1b4332;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-hidden">
+
+    <!-- Màn hình chào mừng để kích hoạt nhạc -->
+    <div id="welcome-overlay">
+        <i class="ph-fill ph-leaf text-6xl mb-4 text-green-400 animate-bounce"></i>
+        <h2 class="text-3xl font-bold mb-6 text-center px-4">Đã sẵn sàng xách balo lên và đi chưa?</h2>
+        <button id="startBtn" class="bg-white text-forest-dark font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transition-transform">
+            Bắt Đầu Khám Phá
+        </button>
+    </div>
+
+    <!-- Trình phát nhạc -->
+    <!-- Lưu ý: Trình duyệt yêu cầu tương tác để phát nhạc. Đã cập nhật src bài Ờ Thì Đi -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.nhaccuatui.com/song/gLkxjqOxWL1P" type="audio/mpeg">
+    </audio>
+
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="musicBtn" class="bg-forest text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-forest-dark transition-all transform hover:scale-105">
+            <i class="ph ph-music-notes text-xl"></i>
+            <span id="musicText" class="font-medium">Đang phát: Ờ Thì Đi</span>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero-bg h-[80vh] flex flex-col justify-center items-center text-center px-4 relative">
+        <div class="glass-card px-8 py-10 rounded-3xl max-w-3xl animate-fade-in-up">
+            <p class="text-forest font-bold tracking-widest uppercase mb-2">Hành trình chữa lành</p>
+            <h1 class="text-4xl md:text-6xl font-bold text-forest-dark mb-4 leading-tight">CHẠM VÀO MÂY NGÀN</h1>
+            <h2 class="text-xl md:text-2xl text-gray-700 font-medium mb-6">Di Linh - Bảo Lộc</h2>
+            <p class="text-gray-600 mb-8 italic">"Tạm gác lại deadline và những tiếng còi xe ồn ã, hãy để 3 ngày 2 đêm sắp tới là khoảng thời gian chúng ta thả lỏng tâm trí..."</p>
+            <a href="#thong-tin" class="inline-block bg-forest text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-forest-dark hover:shadow-xl transition-all duration-300">
+                Khám Phá Lịch Trình
+            </a>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 text-white animate-bounce">
+            <i class="ph ph-caret-double-down text-3xl"></i>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-16">
+        
+        <!-- Thông Tin Mật -->
+        <section id="thong-tin" class="mb-20 pt-10">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-bold text-forest-dark inline-block relative">
+                    <i class="ph-fill ph-target text-forest absolute -left-10 top-1 text-3xl"></i>
+                    THÔNG TIN "MẬT" CỦA CHUYẾN ĐI
+                </h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
+                    <div class="w-14 h-14 mx-auto bg-forest-light rounded-full flex items-center justify-center text-forest text-2xl mb-4">
+                        <i class="ph-fill ph-users-three"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Biệt Đội Vi Vu</h4>
+                    <p class="text-gray-600 text-sm">12 "đồng âm"<br>(Xe 16 chỗ thoải mái)</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
+                    <div class="w-14 h-14 mx-auto bg-forest-light rounded-full flex items-center justify-center text-forest text-2xl mb-4">
+                        <i class="ph-fill ph-calendar-blank"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Thời Gian</h4>
+                    <p class="text-gray-600 text-sm">3 Ngày 2 Đêm<br>(25/04 - 27/04/2026)</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
+                    <div class="w-14 h-14 mx-auto bg-forest-light rounded-full flex items-center justify-center text-forest text-2xl mb-4">
+                        <i class="ph-fill ph-sparkle"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Tinh Thần</h4>
+                    <p class="text-gray-600 text-sm">Vừa Chill, Vừa Cháy!<br>50% nghỉ dưỡng / 50% đi chơi</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
+                    <div class="w-14 h-14 mx-auto bg-forest-light rounded-full flex items-center justify-center text-forest text-2xl mb-4">
+                        <i class="ph-fill ph-wallet"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Ngân Sách</h4>
+                    <p class="text-gray-600 text-sm">1.8 - 2.2 Triệu/người<br>(Bao ăn chơi tẹt ga)</p>
+                </div>
+            </div>
+
+            <!-- Khởi hành -->
+            <div class="mt-8 bg-forest-light rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between border border-forest/20">
+                <div class="flex items-center gap-4 mb-4 md:mb-0">
+                    <div class="bg-forest text-white p-3 rounded-full text-2xl">
+                        <i class="ph-fill ph-van"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-forest-dark text-lg">Khởi Hành: 12:15 Trưa - 25/04/2026</p>
+                        <p class="text-gray-700 text-sm">Điểm đón: <strong>The Galleria</strong> (Ăn trưa no nê trước khi lên xe nhé)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lịch Trình -->
+        <section class="mb-20">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-forest-dark inline-block relative">
+                    <i class="ph-fill ph-map-trifold text-forest absolute -left-10 top-1 text-3xl"></i>
+                    LỊCH TRÌNH CHI TIẾT
+                </h3>
+            </div>
+
+            <!-- NGÀY 1 -->
+            <div class="mb-16">
+                <div class="bg-forest text-white inline-block px-6 py-2 rounded-r-full rounded-tl-full font-bold text-xl shadow-md mb-8">
+                    NGÀY 1 (25/04): Bỏ Phố Về Rừng - Dạ Tiệc Cao Nguyên
+                </div>
+                
+                <div class="timeline-line">
+                    
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 15:30 - Trạm dừng chân Núi Chứa Chan
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Vươn vai hít thở không khí trong lành tại ngọn núi cao thứ 2 Nam Bộ. Cả hội cùng nhâm nhi ly cafe, chụp bức ảnh check-in đầu tiên.</p>
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="[Hình ảnh Núi Chứa Chan]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                    <div class="timeline-dot"></div>
+                    <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 18:30 - Đặt chân đến Di Linh/Bảo Lộc
+                        </h4>
+                        <p class="text-gray-600 mt-2">Ghé thăm tư gia nhà Kim Hằng. Cả đoàn cất bớt hành lý, rửa mặt cho tỉnh táo.</p>
+                    </div>
+
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 09:00 - Khám phá Thác Li Liang 🌿
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Tìm về con thác hoang sơ, cuộn chảy giữa núi rừng. Không gian cực kỳ yên tĩnh, thoái mái lội suối, chụp ảnh rêu phong.</p>
+                    <img src="https://images.unsplash.com/photo-1432405972618-c600f4f71a34?auto=format&fit=crop&w=800&q=80" alt="[Hình ảnh Thác Li Liang]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                    <div class="timeline-dot"></div>
+                    <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 11:30 - Bữa trưa "Chuẩn cơm mẹ nấu"
+                        </h4>
+                        <p class="text-gray-600 mt-2">Dừng chân tại Cơm niêu Hương Trà. Cơm đập giòn rụm ăn cùng các món kho tộ.</p>
+                    </div>
+
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 13:30 - Thả dáng tại Đồi chè Tâm Châu 🍵
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Lạc vào biển chè xanh mướt trải dài tít tắp. Những góc check-in trong veo, xanh mát mắt.</p>
+                    <img src="https://images.unsplash.com/photo-1526485856375-9110812fbf35?auto=format&fit=crop&w=800&q=80" alt="[Hình ảnh Đồi Chè Tâm Châu]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                    <div class="timeline-dot"></div>
+                    <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 15:30 - Chạm tay vào mây tại Linh Quy Pháp Ấn ☁️
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Đón hoàng hôn tại "Cổng Trời" huyền thoại. Tận hưởng không gian thiền tịnh, ngắm biển mây lững lờ trôi.</p>
+                    <img src="https://images.unsplash.com/photo-1518182170546-076616fd6285?auto=format&fit=crop&w=800&q=80" alt="[Hình ảnh Linh Quy Pháp Ấn]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 09:00 - Chinh phục Thác Dambri 💦
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Trầm trồ trước ngọn thác cao nhất và hùng vĩ nhất Lâm Đồng. Trải nghiệm thang máy kính đi xuống chân thác.</p>
+                    <img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80" alt="[Hình ảnh Thác Dambri]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                    <div class="timeline-dot"></div>
+                    <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 15:30 - Chạm tay vào mây tại Linh Quy Pháp Ấn ☁️
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Đón hoàng hôn tại "Cổng Trời" huyền thoại. Tận hưởng không gian thiền tịnh, ngắm biển mây lững lờ trôi.</p>
+                    <img src="" alt="[Hình ảnh Linh Quy Pháp Ấn]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                        <i class="ph-fill ph-clock text-forest"></i> 09:00 - Chinh phục Thác Dambri 💦
+                    </h4>
+                    <p class="text-gray-600 mt-2 mb-4">Trầm trồ trước ngọn thác cao nhất và hùng vĩ nhất Lâm Đồng. Trải nghiệm thang máy kính đi xuống chân thác.</p>
+                    <img src="" alt="[Hình ảnh Thác Dambri]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                </div>
+
+                <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-forest"></i> 19:30 - Đêm lửa trại & BBQ 🔥
+                        </h4>
+                        <p class="text-gray-600 mt-2">Tiệc nướng ngoài trời, thịt nướng xèo xèo, cụng ly bia mát lạnh. Phân xử những ván bài "căng não", hát acoustic thâu đêm.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NGÀY 3 -->
+            <div class="mb-10">
+                <div class="bg-forest text-white inline-block px-6 py-2 rounded-r-full rounded-tl-full font-bold text-xl shadow-md mb-8">
+                    NGÀY 3 (27/04): Bản Hùng Ca Thác Nước & Hẹn Gặp Lại
+                </div>
+                
+                <div class="timeline-line">
+                    
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-forest"></i> 08:00 - Bữa sáng ấm bụng
+                        </h4>
+                        <p class="text-gray-600 mt-2">Thưởng thức Phở Khô Bảo Lộc - món ăn sáng "must-try".</p>
+                    </div>
+
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-forest"></i> 09:00 - Chinh phục Thác Dambri 💦
+                        </h4>
+                        <p class="text-gray-600 mt-2 mb-4">Trầm trồ trước ngọn thác cao nhất và hùng vĩ nhất Lâm Đồng. Trải nghiệm thang máy kính đi xuống chân thác.</p>
+                        <img src="https://images.unsplash.com/photo-1504893524553-b8ee67b2d56c?q=80&w=800&auto=format&fit=crop" alt="[Hình ảnh Thác Dambri]" class="rounded-xl w-full md:w-2/3 lg:w-1/2 h-64 object-cover shadow-md">
+                    </div>
+
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-forest"></i> 12:30 - Tiệc chia tay
+                        </h4>
+                        <p class="text-gray-600 mt-2">Ăn trưa tại nhà hàng Tâm Châu. Mua trà, cà phê làm quà.</p>
+                    </div>
+
+                    <div class="relative mb-8">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-bold text-lg text-forest-dark flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-forest"></i> 14:00 - Tạm biệt Cao Nguyên 🚐
+                        </h4>
+                        <p class="text-gray-600 mt-2">Lên xe về lại TP.HCM. Chợp mắt nghỉ ngơi dưỡng sức.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="timeline-dot bg-green-500 border-green-200"></div>
+                        <h4 class="font-bold text-lg text-green-700 flex items-center gap-2">
+                            <i class="ph-fill ph-house-line"></i> 18:30 - Về đến TP.HCM
+                        </h4>
+                        <p class="text-gray-600 mt-2">Kết thúc chuyến đi thanh xuân với hàng ngàn bức ảnh đẹp!</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Cẩm nang -->
+        <section class="bg-gray-50 rounded-3xl p-8 md:p-12 mb-10 border border-gray-200 shadow-inner">
+            <h3 class="text-2xl font-bold text-forest-dark mb-8 text-center">🎒 CẨM NANG BỎ TÚI (Bắt buộc phải đọc!)</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-orange-100 text-orange-600 p-2 rounded-lg text-xl"><i class="ph-fill ph-sun"></i></div>
+                        <h4 class="font-bold text-lg text-gray-800">Thời tiết (Cuối tháng 4)</h4>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm">
+                        <li>• Nhiệt độ lý tưởng: 20 – 30°C.</li>
+                        <li>• Sáng và tối có sương se lạnh.</li>
+                        <li>• Trưa nắng đẹp, chiều có thể có mưa rào nhẹ.</li>
+                        <li class="font-medium text-forest mt-2">=> Vibe "Đà Lạt thu nhỏ" tuyệt vời!</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-pink-100 text-pink-600 p-2 rounded-lg text-xl"><i class="ph-fill ph-t-shirt"></i></div>
+                        <h4 class="font-bold text-lg text-gray-800">Lên đồ "Slay"</h4>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm">
+                        <li>• <strong>Ban ngày:</strong> Váy áo vintage, boho bay bổng để chụp hình; đồ năng động để đi thác. Đi dép êm/giày thể thao.</li>
+                        <li>• <strong>Buổi tối:</strong> Áo khoác len, cardigan, quần dài chống lạnh khi nướng BBQ.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-blue-100 text-blue-600 p-2 rounded-lg text-xl"><i class="ph-fill ph-first-aid"></i></div>
+                        <h4 class="font-bold text-lg text-gray-800">Vật bất ly thân</h4>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm">
+                        <li>• Kem chống nắng & Kính râm.</li>
+                        <li>• Sạc dự phòng (Rất quan trọng!).</li>
+                        <li>• Thuốc cá nhân (Say xe, tiêu hóa).</li>
+                        <li>• Áo mưa mỏng/Ô dù đề phòng mưa bất chợt.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="text-center py-10">
+            <p class="text-2xl font-bold text-forest mb-4">Bạn đã sẵn sàng xách balo lên và đi chưa? ❤️</p>
+            <button class="bg-forest-dark text-white font-bold py-3 px-10 rounded-full shadow-lg hover:bg-forest transition-colors transform hover:scale-105">
+                Chốt Đơn Ngay!
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-forest-dark text-white text-center py-6 text-sm">
+        <p>Thiết kế với ❤️ dành cho team 12 "đồng âm"</p>
+    </footer>
+
+    <!-- Script xử lý nhạc nền -->
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicText = document.getElementById('musicText');
+        const musicIcon = musicBtn.querySelector('i');
+        const startBtn = document.getElementById('startBtn');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
+        let isPlaying = false;
+
+        // Giảm âm lượng nhạc nền cho chill
+        bgMusic.volume = 0.5;
+
+        // Xử lý nút bắt đầu (bắt buộc để lách luật Auto-play của trình duyệt)
+        startBtn.addEventListener('click', () => {
+            welcomeOverlay.style.opacity = '0';
+            setTimeout(() => {
+                welcomeOverlay.style.display = 'none';
+                document.body.classList.remove('overflow-hidden');
+            }, 500);
+            
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicIcon.classList.replace('ph-music-notes', 'ph-pause');
+                musicIcon.classList.add('animate-pulse');
+            }).catch(e => console.log("Không thể tự động phát nhạc:", e));
+        });
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicText.innerText = 'Bật nhạc Chill';
+                musicIcon.classList.replace('ph-pause', 'ph-music-notes');
+                musicIcon.classList.remove('animate-pulse');
+            } else {
+                bgMusic.play();
+                musicText.innerText = 'Đang phát: Ờ Thì Đi';
+                musicIcon.classList.replace('ph-music-notes', 'ph-pause');
+                musicIcon.classList.add('animate-pulse');
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+</html>
